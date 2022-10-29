@@ -1,7 +1,7 @@
 const socket = io();
 
 // Elements
-const $messageForm = document.getElementById('form');
+const $messageForm = document.getElementById('message-form');
 const $messageFormInput = $messageForm.querySelector('input');
 const $messageFormButton = $messageForm.querySelector('button');
 const $sendLocationButton = document.getElementById('send-location');
@@ -15,8 +15,8 @@ const locationMessageTemplate = document.getElementById('location-message-templa
 const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true });
 
 socket.on('message', (message) => {
-    console.log(message);
     const html = Mustache.render(messageTemplate, {
+        username: message.username,
         message: message.text,
         createdAt: moment(message.createdAt).format('h:mm a'),
     });
@@ -24,8 +24,8 @@ socket.on('message', (message) => {
 });
 
 socket.on('locationMessage', (message) => {
-    console.log(message);
     const html = Mustache.render(locationMessageTemplate, {
+        username: message.username,
         url: message.url,
         createdAt: moment(message.createdAt).format('h:mm a'),
     });
